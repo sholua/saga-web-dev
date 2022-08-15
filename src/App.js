@@ -5,6 +5,9 @@ import "./index.css";
 
 const App = () => {
   const latestNews = useSelector((store) => store?.news?.latestNews || []);
+  const { latestNewsError, popularNewsError } = useSelector(
+    (store) => store?.errors || {}
+  );
   const popularNews = useSelector((store) => store?.news?.popularNews || []);
   const dispatch = useDispatch();
 
@@ -17,10 +20,14 @@ const App = () => {
       <button onClick={handleNews}>Get News</button>
       <div className="container">
         <div className="container-item">
-          <News news={latestNews} title="Latest News" />
+          <News news={latestNews} error={latestNewsError} title="Latest News" />
         </div>
         <div className="container-item">
-          <News news={popularNews} title="Popular News" />
+          <News
+            news={popularNews}
+            error={popularNewsError}
+            title="Popular News"
+          />
         </div>
       </div>
     </div>
