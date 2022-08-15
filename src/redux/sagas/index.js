@@ -8,7 +8,8 @@ import {
   spawn,
 } from "redux-saga/effects";
 import {
-  GET_NEWS,
+  GET_LATEST_NEWS,
+  GET_POPULAR_NEWS,
   SET_LATEST_NEWS_ERROR,
   SET_POPULAR_NEWS_ERROR,
 } from "../constants";
@@ -39,19 +40,23 @@ export function* handlePopularNews() {
   }
 }
 
-export function* handleNews() {
-  // yield spawn(handleLatestNews);
-  // yield spawn(handlePopularNews);
-  yield fork(handleLatestNews);
-  yield fork(handlePopularNews);
-  // yield all([call(handleLatestNews), call(handlePopularNews)]);
-  // yield race([call(handleLatestNews), call(handlePopularNews)]);
+// export function* handleNews() {
+//   // yield spawn(handleLatestNews);
+//   // yield spawn(handlePopularNews);
+//   yield fork(handleLatestNews);
+//   yield fork(handlePopularNews);
+//   // yield all([call(handleLatestNews), call(handlePopularNews)]);
+//   // yield race([call(handleLatestNews), call(handlePopularNews)]);
+// }
+
+export function* watchPopularSaga() {
+  yield takeEvery(GET_POPULAR_NEWS, handlePopularNews);
 }
 
-export function* watchClickSaga() {
-  yield takeEvery(GET_NEWS, handleNews);
+export function* watchLatestSaga() {
+  yield takeEvery(GET_LATEST_NEWS, handleLatestNews);
 }
 
 export default function* rootSaga() {
-  yield watchClickSaga();
+  yield all([fork(watchPopularSaga), fork(watchLatestSaga)]);
 }
